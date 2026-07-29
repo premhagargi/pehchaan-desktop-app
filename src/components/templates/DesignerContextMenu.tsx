@@ -10,12 +10,12 @@ import {
   QrCodeIcon,
   Image01Icon,
   LockIcon,
-  Unlock01Icon,
+  UnlockIcon,
   ViewIcon,
   ViewOffIcon,
   Delete02Icon,
   Copy01Icon,
-  Scissors01Icon,
+  Scissor01Icon,
   AlignLeftIcon,
   AlignHorizontalCenterIcon,
   AlignRightIcon,
@@ -26,8 +26,8 @@ import {
   ArrowDown01Icon,
   ArrowUpDoubleIcon,
   ArrowDownDoubleIcon,
-  PaintbrushIcon,
-  Sliders01Icon,
+  PaintBrushIcon,
+  Settings01Icon,
   Add01Icon,
   Tick01Icon,
   RotateRightIcon,
@@ -265,7 +265,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
           {/* Canvas Background Color */}
           <div>
             <div className="text-[10px] font-semibold text-slate-400 uppercase mb-1.5 flex items-center gap-1">
-              <Icon icon={PaintbrushIcon} size={13} className="text-sky-400" />
+              <Icon icon={PaintBrushIcon} size={13} className="text-sky-400" />
               <span>Canvas Background Color</span>
             </div>
             <div className="flex flex-wrap gap-1 items-center">
@@ -339,7 +339,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                 title="Lock/Unlock"
                 className={`p-1 rounded hover:bg-slate-800 ${el.locked ? 'text-amber-400' : 'text-slate-400'}`}
               >
-                <Icon icon={el.locked ? LockIcon : Unlock01Icon} size={14} />
+                <Icon icon={el.locked ? LockIcon : UnlockIcon} size={14} />
               </button>
               <button
                 onClick={() => update({ visible: el.visible === false ? true : false })}
@@ -380,14 +380,14 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                 onClick={() => setActiveTab('style')}
                 className={`flex-1 py-1.5 text-[10px] font-semibold uppercase tracking-wider flex items-center justify-center gap-1 border-b-2 transition-colors ${activeTab === 'style' ? 'border-sky-500 text-sky-400 bg-sky-950/30' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
               >
-                <Icon icon={PaintbrushIcon} size={13} />
+                <Icon icon={PaintBrushIcon} size={13} />
                 <span>Style</span>
               </button>
               <button
                 onClick={() => setActiveTab('transform')}
                 className={`flex-1 py-1.5 text-[10px] font-semibold uppercase tracking-wider flex items-center justify-center gap-1 border-b-2 transition-colors ${activeTab === 'transform' ? 'border-sky-500 text-sky-400 bg-sky-950/30' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
               >
-                <Icon icon={Sliders01Icon} size={13} />
+                <Icon icon={Settings01Icon} size={13} />
                 <span>Transform</span>
               </button>
             </div>
@@ -844,7 +844,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
               className="py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center gap-1 text-[10px]"
               title="Cut"
             >
-              <Icon icon={Scissors01Icon} size={12} />
+              <Icon icon={Scissor01Icon} size={12} />
               <span>Cut</span>
             </button>
 

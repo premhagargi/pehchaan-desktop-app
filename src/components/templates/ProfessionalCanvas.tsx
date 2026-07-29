@@ -192,21 +192,26 @@ export const ProfessionalCanvas: React.FC<ProfessionalCanvasProps> = ({
   // Smart snap guides
   const snapDragMove = useCallback((e: any, draggingEl: RenderElement) => {
     const node = e.target;
-    let nx = node.x(), ny = node.y();
+    const isCircle = draggingEl.type === 'shape' && draggingEl.shapeType === 'circle';
     const w = draggingEl.width * MM_TO_PX, h = draggingEl.height * MM_TO_PX;
+
+    // Convert node position to top-left corner px
+    let tlx = isCircle ? node.x() - w / 2 : node.x();
+    let tly = isCircle ? node.y() - h / 2 : node.y();
+
     const THRESH = 5;
     const newGuides: { points: number[]; color: string }[] = [];
 
     if (snapToGrid) {
       const stepPx = gridSpacingMm * MM_TO_PX;
-      nx = Math.round(nx / stepPx) * stepPx;
-      ny = Math.round(ny / stepPx) * stepPx;
+      tlx = Math.round(tlx / stepPx) * stepPx;
+      tly = Math.round(tly / stepPx) * stepPx;
     }
 
     if (snapToObjects) {
       const cx = canvasW / 2, cy = canvasH / 2;
-      if (Math.abs(nx + w / 2 - cx) < THRESH) { nx = cx - w / 2; newGuides.push({ points: [cx, 0, cx, canvasH], color: '#ef4444' }); }
-      if (Math.abs(ny + h / 2 - cy) < THRESH) { ny = cy - h / 2; newGuides.push({ points: [0, cy, canvasW, cy], color: '#ef4444' }); }
+      if (Math.abs(tlx + w / 2 - cx) < THRESH) { tlx = cx - w / 2; newGuides.push({ points: [cx, 0, cx, canvasH], color: '#ef4444' }); }
+      if (Math.abs(tly + h / 2 - cy) < THRESH) { tly = cy - h / 2; newGuides.push({ points: [0, cy, canvasW, cy], color: '#ef4444' }); }
 
       elements.forEach(other => {
         if (other.id === draggingEl.id || other.visible === false) return;
@@ -214,16 +219,18 @@ export const ProfessionalCanvas: React.FC<ProfessionalCanvasProps> = ({
         const ot = other.y * MM_TO_PX, ob = (other.y + other.height) * MM_TO_PX;
         const ocx = (ol + or_) / 2, ocy = (ot + ob) / 2;
 
-        if (Math.abs(nx - ol) < THRESH) { nx = ol; newGuides.push({ points: [ol, 0, ol, canvasH], color: '#38bdf8' }); }
-        if (Math.abs(nx + w - or_) < THRESH) { nx = or_ - w; newGuides.push({ points: [or_, 0, or_, canvasH], color: '#38bdf8' }); }
-        if (Math.abs(nx + w / 2 - ocx) < THRESH) { nx = ocx - w / 2; newGuides.push({ points: [ocx, 0, ocx, canvasH], color: '#38bdf8' }); }
-        if (Math.abs(ny - ot) < THRESH) { ny = ot; newGuides.push({ points: [0, ot, canvasW, ot], color: '#38bdf8' }); }
-        if (Math.abs(ny + h - ob) < THRESH) { ny = ob - h; newGuides.push({ points: [0, ob, canvasW, ob], color: '#38bdf8' }); }
-        if (Math.abs(ny + h / 2 - ocy) < THRESH) { ny = ocy - h / 2; newGuides.push({ points: [0, ocy, canvasW, ocy], color: '#38bdf8' }); }
+        if (Math.abs(tlx - ol) < THRESH) { tlx = ol; newGuides.push({ points: [ol, 0, ol, canvasH], color: '#38bdf8' }); }
+        if (Math.abs(tlx + w - or_) < THRESH) { tlx = or_ - w; newGuides.push({ points: [or_, 0, or_, canvasH], color: '#38bdf8' }); }
+        if (Math.abs(tlx + w / 2 - ocx) < THRESH) { tlx = ocx - w / 2; newGuides.push({ points: [ocx, 0, ocx, canvasH], color: '#38bdf8' }); }
+        if (Math.abs(tly - ot) < THRESH) { tly = ot; newGuides.push({ points: [0, ot, canvasW, ot], color: '#38bdf8' }); }
+        if (Math.abs(tly + h - ob) < THRESH) { tly = ob - h; newGuides.push({ points: [0, ob, canvasW, ob], color: '#38bdf8' }); }
+        if (Math.abs(tly + h / 2 - ocy) < THRESH) { tly = ocy - h / 2; newGuides.push({ points: [0, ocy, canvasW, ocy], color: '#38bdf8' }); }
       });
     }
 
-    node.x(nx); node.y(ny);
+    // Set node position back
+    node.x(isCircle ? tlx + w / 2 : tlx);
+    node.y(isCircle ? tly + h / 2 : tly);
     setGuides(newGuides);
   }, [snapToGrid, snapToObjects, gridSpacingMm, elements, canvasW, canvasH]);
 
@@ -420,8 +427,11 @@ export const ProfessionalCanvas: React.FC<ProfessionalCanvasProps> = ({
               onDragEnd: (e: any) => {
                 setGuides([]);
                 const alt = (e.evt as MouseEvent).altKey;
-                const nx = Math.round(e.target.x() / MM_TO_PX * 10) / 10;
-                const ny = Math.round(e.target.y() / MM_TO_PX * 10) / 10;
+                const isCircle = el.type === 'shape' && el.shapeType === 'circle';
+                const rawX = isCircle ? e.target.x() - wPx / 2 : e.target.x();
+                const rawY = isCircle ? e.target.y() - hPx / 2 : e.target.y();
+                const nx = Math.round(rawX / MM_TO_PX * 10) / 10;
+                const ny = Math.round(rawY / MM_TO_PX * 10) / 10;
                 onUpdateElement({ ...el, x: nx, y: ny });
                 if (alt) onDuplicate([el.id]);
               },
@@ -429,12 +439,17 @@ export const ProfessionalCanvas: React.FC<ProfessionalCanvasProps> = ({
                 const node = e.target;
                 const sx = node.scaleX(), sy = node.scaleY();
                 node.scaleX(1); node.scaleY(1);
+                const isCircle = el.type === 'shape' && el.shapeType === 'circle';
+                const newW = Math.max(1, Math.round(node.width() * sx / MM_TO_PX * 10) / 10);
+                const newH = Math.max(1, Math.round(node.height() * sy / MM_TO_PX * 10) / 10);
+                const rawX = isCircle ? node.x() - (newW * MM_TO_PX) / 2 : node.x();
+                const rawY = isCircle ? node.y() - (newH * MM_TO_PX) / 2 : node.y();
                 onUpdateElement({
                   ...el,
-                  x: Math.round(node.x() / MM_TO_PX * 10) / 10,
-                  y: Math.round(node.y() / MM_TO_PX * 10) / 10,
-                  width: Math.max(1, Math.round(node.width() * sx / MM_TO_PX * 10) / 10),
-                  height: Math.max(1, Math.round(node.height() * sy / MM_TO_PX * 10) / 10),
+                  x: Math.round(rawX / MM_TO_PX * 10) / 10,
+                  y: Math.round(rawY / MM_TO_PX * 10) / 10,
+                  width: newW,
+                  height: newH,
                   rotation: Math.round(node.rotation() * 10) / 10,
                 });
               },

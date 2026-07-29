@@ -1,13 +1,40 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { RenderElement, TemplateItem, FieldDefinition, BarcodeSymbology } from '../../types';
+import { HugeiconsIcon } from '@hugeicons/react';
 import {
-  Database, Tag, Type, Square, Circle as CircleIcon, QrCode, Image,
-  Lock, Unlock, Eye, EyeOff, Trash2, Copy, Scissors,
-  AlignLeft, AlignCenter, AlignRight,
-  AlignVerticalJustifyStart, AlignVerticalSpaceAround, AlignVerticalJustifyEnd,
-  ArrowUp, ArrowDown, ChevronsUp, ChevronsDown,
-  Palette, Sliders, Plus, Check, RotateCw, Move, Sparkles, Layers
-} from 'lucide-react';
+  Database01Icon,
+  Tag01Icon,
+  TextIcon,
+  SquareIcon,
+  CircleIcon,
+  QrCodeIcon,
+  Image01Icon,
+  LockIcon,
+  Unlock01Icon,
+  ViewIcon,
+  ViewOffIcon,
+  Delete02Icon,
+  Copy01Icon,
+  Scissors01Icon,
+  AlignLeftIcon,
+  AlignHorizontalCenterIcon,
+  AlignRightIcon,
+  AlignTopIcon,
+  AlignVerticalCenterIcon,
+  AlignBottomIcon,
+  ArrowUp01Icon,
+  ArrowDown01Icon,
+  ArrowUpDoubleIcon,
+  ArrowDownDoubleIcon,
+  PaintbrushIcon,
+  Sliders01Icon,
+  Add01Icon,
+  Tick01Icon,
+  RotateRightIcon,
+  SparklesIcon,
+  Layers01Icon,
+  ColorPickerIcon
+} from '@hugeicons/core-free-icons';
 
 interface DesignerContextMenuProps {
   x: number;
@@ -28,6 +55,10 @@ interface DesignerContextMenuProps {
   onUpdateTemplate: (t: TemplateItem) => void;
   onClose: () => void;
 }
+
+const Icon: React.FC<{ icon: any; size?: number; className?: string }> = ({ icon, size = 14, className = '' }) => (
+  <HugeiconsIcon icon={icon} size={size} className={className} />
+);
 
 const COLOR_SWATCHES = [
   '#ffffff', '#000000', '#38bdf8', '#3b82f6', '#6366f1',
@@ -145,7 +176,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
       {!el && (
         <div className="p-3 space-y-3 overflow-y-auto">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-800">
-            <Sparkles className="w-4 h-4 text-sky-400" />
+            <Icon icon={SparklesIcon} size={16} className="text-sky-400" />
             <span className="font-bold text-sky-300 uppercase tracking-wider text-[11px]">Canvas Options</span>
           </div>
 
@@ -153,14 +184,14 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
           <div>
             <div className="text-[10px] font-semibold text-slate-400 uppercase mb-1.5 flex items-center justify-between">
               <span>Add Element</span>
-              <Plus className="w-3 h-3 text-slate-500" />
+              <Icon icon={Add01Icon} size={12} className="text-slate-500" />
             </div>
             <div className="grid grid-cols-2 gap-1.5">
               <button
                 onClick={() => { onAddElement('text'); onClose(); }}
                 className="flex items-center gap-2 p-2 rounded-lg bg-slate-800/80 hover:bg-sky-600/30 border border-slate-700/60 text-slate-200 text-left transition-colors"
               >
-                <Type className="w-4 h-4 text-sky-400 shrink-0" />
+                <Icon icon={TextIcon} size={16} className="text-sky-400 shrink-0" />
                 <span>Text Box</span>
               </button>
 
@@ -168,7 +199,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                 onClick={() => { onAddElement('shape', { shapeType: 'rect' }); onClose(); }}
                 className="flex items-center gap-2 p-2 rounded-lg bg-slate-800/80 hover:bg-sky-600/30 border border-slate-700/60 text-slate-200 text-left transition-colors"
               >
-                <Square className="w-4 h-4 text-emerald-400 shrink-0" />
+                <Icon icon={SquareIcon} size={16} className="text-emerald-400 shrink-0" />
                 <span>Rectangle</span>
               </button>
 
@@ -176,7 +207,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                 onClick={() => { onAddElement('shape', { shapeType: 'circle' }); onClose(); }}
                 className="flex items-center gap-2 p-2 rounded-lg bg-slate-800/80 hover:bg-sky-600/30 border border-slate-700/60 text-slate-200 text-left transition-colors"
               >
-                <CircleIcon className="w-4 h-4 text-amber-400 shrink-0" />
+                <Icon icon={CircleIcon} size={16} className="text-amber-400 shrink-0" />
                 <span>Circle</span>
               </button>
 
@@ -184,7 +215,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                 onClick={() => { onAddElement('photo_placeholder'); onClose(); }}
                 className="flex items-center gap-2 p-2 rounded-lg bg-slate-800/80 hover:bg-sky-600/30 border border-slate-700/60 text-slate-200 text-left transition-colors"
               >
-                <Image className="w-4 h-4 text-purple-400 shrink-0" />
+                <Icon icon={Image01Icon} size={16} className="text-purple-400 shrink-0" />
                 <span>Photo Frame</span>
               </button>
 
@@ -192,7 +223,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                 onClick={() => { onAddElement('barcode', { barcode: { symbology: 'qrcode' } }); onClose(); }}
                 className="flex items-center gap-2 p-2 rounded-lg bg-slate-800/80 hover:bg-sky-600/30 border border-slate-700/60 text-slate-200 text-left transition-colors col-span-2"
               >
-                <QrCode className="w-4 h-4 text-rose-400 shrink-0" />
+                <Icon icon={QrCodeIcon} size={16} className="text-rose-400 shrink-0" />
                 <span>Barcode / QR Code</span>
               </button>
             </div>
@@ -202,7 +233,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
           {fields.length > 0 && (
             <div>
               <div className="text-[10px] font-semibold text-slate-400 uppercase mb-1.5 flex items-center gap-1">
-                <Database className="w-3 h-3 text-sky-400" />
+                <Icon icon={Database01Icon} size={13} className="text-sky-400" />
                 <span>Add Dynamic Field Box</span>
               </div>
               <div className="flex flex-wrap gap-1 max-h-28 overflow-y-auto pr-1">
@@ -223,7 +254,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                     }}
                     className="px-2 py-1 bg-sky-950/80 hover:bg-sky-600/40 border border-sky-700/50 rounded-md text-[10px] text-sky-200 transition-colors flex items-center gap-1"
                   >
-                    <Plus className="w-2.5 h-2.5" />
+                    <Icon icon={Add01Icon} size={10} />
                     <span>{f.label}</span>
                   </button>
                 ))}
@@ -233,7 +264,10 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
 
           {/* Canvas Background Color */}
           <div>
-            <div className="text-[10px] font-semibold text-slate-400 uppercase mb-1.5">Canvas Background Color</div>
+            <div className="text-[10px] font-semibold text-slate-400 uppercase mb-1.5 flex items-center gap-1">
+              <Icon icon={PaintbrushIcon} size={13} className="text-sky-400" />
+              <span>Canvas Background Color</span>
+            </div>
             <div className="flex flex-wrap gap-1 items-center">
               {COLOR_SWATCHES.map(c => (
                 <button
@@ -254,7 +288,10 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
 
           {/* Preset Card Sizes */}
           <div>
-            <div className="text-[10px] font-semibold text-slate-400 uppercase mb-1.5">Card Size Preset</div>
+            <div className="text-[10px] font-semibold text-slate-400 uppercase mb-1.5 flex items-center gap-1">
+              <Icon icon={Layers01Icon} size={13} className="text-sky-400" />
+              <span>Card Size Preset</span>
+            </div>
             <div className="grid grid-cols-2 gap-1 text-[10px]">
               {[
                 { label: 'CR80 Landscape', w: 85.6, h: 53.98 },
@@ -265,9 +302,10 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                 <button
                   key={p.label}
                   onClick={() => { onUpdateTemplate({ ...template, cardWidthMm: p.w, cardHeightMm: p.h }); onClose(); }}
-                  className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700/60 text-slate-300 text-left"
+                  className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700/60 text-slate-300 text-left flex items-center gap-1"
                 >
-                  {p.label}
+                  <Icon icon={SquareIcon} size={12} className="text-slate-400 shrink-0" />
+                  <span>{p.label}</span>
                 </button>
               ))}
             </div>
@@ -280,7 +318,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
               disabled={!clipboard.length}
               className="flex-1 py-1.5 rounded bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-200 flex items-center justify-center gap-1.5"
             >
-              <Copy className="w-3.5 h-3.5" />
+              <Icon icon={Copy01Icon} size={14} />
               <span>Paste</span>
             </button>
           </div>
@@ -301,21 +339,21 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                 title="Lock/Unlock"
                 className={`p-1 rounded hover:bg-slate-800 ${el.locked ? 'text-amber-400' : 'text-slate-400'}`}
               >
-                {el.locked ? <Lock className="w-3.5 h-3.5" /> : <Unlock className="w-3.5 h-3.5" />}
+                <Icon icon={el.locked ? LockIcon : Unlock01Icon} size={14} />
               </button>
               <button
                 onClick={() => update({ visible: el.visible === false ? true : false })}
                 title="Toggle Visibility"
                 className={`p-1 rounded hover:bg-slate-800 ${el.visible === false ? 'text-rose-400' : 'text-slate-400'}`}
               >
-                {el.visible === false ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                <Icon icon={el.visible === false ? ViewOffIcon : ViewIcon} size={14} />
               </button>
               <button
                 onClick={() => { onDuplicate(); onClose(); }}
                 title="Duplicate"
                 className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white"
               >
-                <Copy className="w-3.5 h-3.5" />
+                <Icon icon={Copy01Icon} size={14} />
               </button>
               <button
                 onClick={() => { onDelete(); onClose(); }}
@@ -323,7 +361,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                 disabled={!!el.locked}
                 className="p-1 rounded hover:bg-red-500/20 text-slate-400 hover:text-red-400 disabled:opacity-30"
               >
-                <Trash2 className="w-3.5 h-3.5" />
+                <Icon icon={Delete02Icon} size={14} />
               </button>
             </div>
           </div>
@@ -335,21 +373,21 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                 onClick={() => setActiveTab('binding')}
                 className={`flex-1 py-1.5 text-[10px] font-semibold uppercase tracking-wider flex items-center justify-center gap-1 border-b-2 transition-colors ${activeTab === 'binding' ? 'border-sky-500 text-sky-400 bg-sky-950/30' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
               >
-                <Database className="w-3 h-3" />
+                <Icon icon={Database01Icon} size={13} />
                 <span>Field Binding</span>
               </button>
               <button
                 onClick={() => setActiveTab('style')}
                 className={`flex-1 py-1.5 text-[10px] font-semibold uppercase tracking-wider flex items-center justify-center gap-1 border-b-2 transition-colors ${activeTab === 'style' ? 'border-sky-500 text-sky-400 bg-sky-950/30' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
               >
-                <Palette className="w-3 h-3" />
+                <Icon icon={PaintbrushIcon} size={13} />
                 <span>Style</span>
               </button>
               <button
                 onClick={() => setActiveTab('transform')}
                 className={`flex-1 py-1.5 text-[10px] font-semibold uppercase tracking-wider flex items-center justify-center gap-1 border-b-2 transition-colors ${activeTab === 'transform' ? 'border-sky-500 text-sky-400 bg-sky-950/30' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
               >
-                <Sliders className="w-3 h-3" />
+                <Icon icon={Sliders01Icon} size={13} />
                 <span>Transform</span>
               </button>
             </div>
@@ -365,7 +403,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                 <div className="p-2.5 rounded-lg bg-sky-950/40 border border-sky-800/60 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-sky-300 uppercase tracking-wider flex items-center gap-1">
-                      <Database className="w-3.5 h-3.5 text-sky-400" />
+                      <Icon icon={Database01Icon} size={14} className="text-sky-400" />
                       Bind to Field
                     </span>
                     {el.binding && (
@@ -380,8 +418,11 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                       onClick={() => update({ binding: undefined })}
                       className={`px-2 py-1.5 rounded text-left text-[10px] border transition-colors col-span-2 flex items-center justify-between ${!el.binding ? 'bg-slate-800 border-sky-500 text-white font-medium' : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200'}`}
                     >
-                      <span>-- Static Text (No Binding) --</span>
-                      {!el.binding && <Check className="w-3 h-3 text-sky-400" />}
+                      <span className="flex items-center gap-1.5">
+                        <Icon icon={TextIcon} size={12} className="text-slate-400" />
+                        Static Text (No Binding)
+                      </span>
+                      {!el.binding && <Icon icon={Tick01Icon} size={14} className="text-sky-400" />}
                     </button>
 
                     {fields.length === 0 ? (
@@ -408,7 +449,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                             className={`px-2 py-1.5 rounded text-left text-[10px] border transition-all flex items-center justify-between gap-1 truncate ${isSelected ? 'bg-sky-600/30 border-sky-400 text-sky-200 font-semibold' : 'bg-slate-800/80 hover:bg-sky-900/40 border-slate-700/60 text-slate-300'}`}
                           >
                             <span className="truncate">{f.label}</span>
-                            {isSelected && <Check className="w-3 h-3 text-sky-400 shrink-0" />}
+                            {isSelected && <Icon icon={Tick01Icon} size={14} className="text-sky-400 shrink-0" />}
                           </button>
                         );
                       })
@@ -419,8 +460,9 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                 {/* Insert Field Tag into Text */}
                 {el.type === 'text' && fields.length > 0 && (
                   <div>
-                    <label className="text-[10px] font-semibold text-slate-400 uppercase block mb-1">
-                      Insert Field Tag
+                    <label className="text-[10px] font-semibold text-slate-400 uppercase block mb-1 flex items-center gap-1">
+                      <Icon icon={Tag01Icon} size={12} className="text-sky-400" />
+                      <span>Insert Field Tag</span>
                     </label>
                     <div className="flex flex-wrap gap-1">
                       {fields.map(f => (
@@ -434,7 +476,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                           }}
                           className="px-2 py-1 bg-slate-800 hover:bg-sky-600/30 border border-slate-700 rounded text-[10px] text-slate-300 transition-colors flex items-center gap-1"
                         >
-                          <Plus className="w-2.5 h-2.5 text-sky-400" />
+                          <Icon icon={Add01Icon} size={10} className="text-sky-400" />
                           <span>{`{{${f.key}}}`}</span>
                         </button>
                       ))}
@@ -445,8 +487,9 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                 {/* Text Content Editor */}
                 {el.type === 'text' && (
                   <div>
-                    <label className="text-[10px] font-semibold text-slate-400 uppercase block mb-1">
-                      Text Expression / Template
+                    <label className="text-[10px] font-semibold text-slate-400 uppercase block mb-1 flex items-center gap-1">
+                      <Icon icon={TextIcon} size={12} className="text-sky-400" />
+                      <span>Text Expression / Template</span>
                     </label>
                     <textarea
                       rows={2}
@@ -511,7 +554,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                             onClick={() => updateStyle({ align: a })}
                             className={`p-1.5 rounded transition-colors ${el.style?.align === a ? 'bg-sky-500/20 text-sky-400' : 'text-slate-400'}`}
                           >
-                            {a === 'left' ? <AlignLeft className="w-3.5 h-3.5" /> : a === 'center' ? <AlignCenter className="w-3.5 h-3.5" /> : <AlignRight className="w-3.5 h-3.5" />}
+                            {a === 'left' ? <Icon icon={AlignLeftIcon} size={15} /> : a === 'center' ? <Icon icon={AlignHorizontalCenterIcon} size={15} /> : <Icon icon={AlignRightIcon} size={15} />}
                           </button>
                         ))}
                       </div>
@@ -687,7 +730,10 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
 
                 {/* Rotation Presets */}
                 <div>
-                  <label className="text-[10px] font-semibold text-slate-400 uppercase block mb-1">Rotation</label>
+                  <label className="text-[10px] font-semibold text-slate-400 uppercase block mb-1 flex items-center gap-1">
+                    <Icon icon={RotateRightIcon} size={12} className="text-sky-400" />
+                    <span>Rotation</span>
+                  </label>
                   <div className="flex items-center gap-1">
                     {[0, 90, 180, 270].map(deg => (
                       <button
@@ -709,28 +755,28 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                       onClick={() => onLayerMove('front')}
                       className="flex items-center gap-1.5 p-1.5 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300"
                     >
-                      <ChevronsUp className="w-3.5 h-3.5 text-sky-400" />
+                      <Icon icon={ArrowUpDoubleIcon} size={14} className="text-sky-400" />
                       <span>Bring to Front</span>
                     </button>
                     <button
                       onClick={() => onLayerMove('up')}
                       className="flex items-center gap-1.5 p-1.5 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300"
                     >
-                      <ArrowUp className="w-3.5 h-3.5 text-sky-400" />
+                      <Icon icon={ArrowUp01Icon} size={14} className="text-sky-400" />
                       <span>Bring Forward</span>
                     </button>
                     <button
                       onClick={() => onLayerMove('down')}
                       className="flex items-center gap-1.5 p-1.5 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300"
                     >
-                      <ArrowDown className="w-3.5 h-3.5 text-sky-400" />
+                      <Icon icon={ArrowDown01Icon} size={14} className="text-sky-400" />
                       <span>Send Backward</span>
                     </button>
                     <button
                       onClick={() => onLayerMove('back')}
                       className="flex items-center gap-1.5 p-1.5 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300"
                     >
-                      <ChevronsDown className="w-3.5 h-3.5 text-sky-400" />
+                      <Icon icon={ArrowDownDoubleIcon} size={14} className="text-sky-400" />
                       <span>Send to Back</span>
                     </button>
                   </div>
@@ -745,22 +791,22 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                   <label className="text-[10px] font-semibold text-slate-400 uppercase block mb-1">Align Selected Objects</label>
                   <div className="grid grid-cols-3 gap-1">
                     <button onClick={() => align('x', 'min')} title="Align Left" className="p-2 bg-slate-800 border border-slate-700 rounded hover:bg-sky-950/40 hover:border-sky-500/50 flex items-center justify-center">
-                      <AlignLeft className="w-4 h-4 text-slate-300" />
+                      <Icon icon={AlignLeftIcon} size={16} className="text-slate-300" />
                     </button>
                     <button onClick={() => align('x', 'center')} title="Align Center" className="p-2 bg-slate-800 border border-slate-700 rounded hover:bg-sky-950/40 hover:border-sky-500/50 flex items-center justify-center">
-                      <AlignCenter className="w-4 h-4 text-slate-300" />
+                      <Icon icon={AlignHorizontalCenterIcon} size={16} className="text-slate-300" />
                     </button>
                     <button onClick={() => align('x', 'max')} title="Align Right" className="p-2 bg-slate-800 border border-slate-700 rounded hover:bg-sky-950/40 hover:border-sky-500/50 flex items-center justify-center">
-                      <AlignRight className="w-4 h-4 text-slate-300" />
+                      <Icon icon={AlignRightIcon} size={16} className="text-slate-300" />
                     </button>
                     <button onClick={() => align('y', 'min')} title="Align Top" className="p-2 bg-slate-800 border border-slate-700 rounded hover:bg-sky-950/40 hover:border-sky-500/50 flex items-center justify-center">
-                      <AlignVerticalJustifyStart className="w-4 h-4 text-slate-300" />
+                      <Icon icon={AlignTopIcon} size={16} className="text-slate-300" />
                     </button>
                     <button onClick={() => align('y', 'center')} title="Align Middle" className="p-2 bg-slate-800 border border-slate-700 rounded hover:bg-sky-950/40 hover:border-sky-500/50 flex items-center justify-center">
-                      <AlignVerticalSpaceAround className="w-4 h-4 text-slate-300" />
+                      <Icon icon={AlignVerticalCenterIcon} size={16} className="text-slate-300" />
                     </button>
                     <button onClick={() => align('y', 'max')} title="Align Bottom" className="p-2 bg-slate-800 border border-slate-700 rounded hover:bg-sky-950/40 hover:border-sky-500/50 flex items-center justify-center">
-                      <AlignVerticalJustifyEnd className="w-4 h-4 text-slate-300" />
+                      <Icon icon={AlignBottomIcon} size={16} className="text-slate-300" />
                     </button>
                   </div>
                 </div>
@@ -769,11 +815,11 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                   <label className="text-[10px] font-semibold text-slate-400 uppercase block mb-1">Layer Ordering</label>
                   <div className="grid grid-cols-2 gap-1 text-[10px]">
                     <button onClick={() => onLayerMove('front')} className="flex items-center gap-1.5 p-1.5 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300">
-                      <ChevronsUp className="w-3.5 h-3.5 text-sky-400" />
+                      <Icon icon={ArrowUpDoubleIcon} size={14} className="text-sky-400" />
                       <span>Bring to Front</span>
                     </button>
                     <button onClick={() => onLayerMove('back')} className="flex items-center gap-1.5 p-1.5 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300">
-                      <ChevronsDown className="w-3.5 h-3.5 text-sky-400" />
+                      <Icon icon={ArrowDownDoubleIcon} size={14} className="text-sky-400" />
                       <span>Send to Back</span>
                     </button>
                   </div>
@@ -789,7 +835,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
               className="py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center gap-1 text-[10px]"
               title="Copy"
             >
-              <Copy className="w-3 h-3" />
+              <Icon icon={Copy01Icon} size={12} />
               <span>Copy</span>
             </button>
 
@@ -798,7 +844,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
               className="py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center gap-1 text-[10px]"
               title="Cut"
             >
-              <Scissors className="w-3 h-3" />
+              <Icon icon={Scissors01Icon} size={12} />
               <span>Cut</span>
             </button>
 
@@ -807,7 +853,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
               className="py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center gap-1 text-[10px]"
               title="Duplicate"
             >
-              <Plus className="w-3 h-3" />
+              <Icon icon={Add01Icon} size={12} />
               <span>Duplicate</span>
             </button>
 
@@ -816,7 +862,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
               className="py-1 rounded bg-red-950/60 hover:bg-red-900/80 border border-red-800/60 text-red-300 flex items-center justify-center gap-1 text-[10px]"
               title="Delete"
             >
-              <Trash2 className="w-3 h-3" />
+              <Icon icon={Delete02Icon} size={12} />
               <span>Delete</span>
             </button>
           </div>

@@ -55,10 +55,15 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [adjustedPos, setAdjustedPos] = useState({ x, y });
-  const [activeTab, setActiveTab] = useState<'binding' | 'style' | 'transform' | 'canvas'>('binding');
 
   const el = selectedElements[0] || null;
   const isMulti = selectedElements.length > 1;
+
+  const [activeTab, setActiveTab] = useState<'binding' | 'style' | 'transform'>(() => {
+    if (el?.type === 'shape') return 'style';
+    if (el?.type === 'image') return 'transform';
+    return 'binding';
+  });
 
   // Auto position inside viewport
   useEffect(() => {
@@ -67,15 +72,8 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
     const winW = window.innerWidth;
     const winH = window.innerHeight;
 
-    let newX = x;
-    let newY = y;
-
-    if (x + rect.width > winW - 12) {
-      newX = Math.max(12, winW - rect.width - 12);
-    }
-    if (y + rect.height > winH - 12) {
-      newY = Math.max(12, winH - rect.height - 12);
-    }
+    let newX = Math.min(Math.max(12, x), Math.max(12, winW - rect.width - 12));
+    let newY = Math.min(Math.max(12, y), Math.max(12, winH - rect.height - 12));
 
     setAdjustedPos({ x: newX, y: newY });
   }, [x, y]);
@@ -137,8 +135,11 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
   return (
     <div
       ref={menuRef}
+      onMouseDown={(e) => e.stopPropagation()}
+      onPointerDown={(e) => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
       style={{ left: adjustedPos.x, top: adjustedPos.y }}
-      className="fixed z-50 w-80 bg-slate-900/95 border border-slate-700/80 rounded-xl shadow-2xl backdrop-blur-xl text-slate-200 text-xs overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-100"
+      className="fixed z-50 w-80 bg-slate-900/95 border border-slate-700/80 rounded-xl shadow-2xl backdrop-blur-xl text-slate-200 text-xs overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-100 select-none"
     >
       {/* ---------------- BACKGROUND / CANVAS CONTEXT MENU ---------------- */}
       {!el && (
@@ -383,29 +384,35 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                       {!el.binding && <Check className="w-3 h-3 text-sky-400" />}
                     </button>
 
-                    {fields.map(f => {
-                      const isSelected = el.binding === f.key;
-                      return (
-                        <button
-                          key={f.id}
-                          onClick={() => {
-                            if (el.type === 'text' || el.type === 'barcode') {
-                              update({
-                                binding: f.key,
-                                text: `{{${f.key}}}`,
-                                name: f.label
-                              });
-                            } else {
-                              update({ binding: f.key, name: f.label });
-                            }
-                          }}
-                          className={`px-2 py-1.5 rounded text-left text-[10px] border transition-all flex items-center justify-between gap-1 truncate ${isSelected ? 'bg-sky-600/30 border-sky-400 text-sky-200 font-semibold' : 'bg-slate-800/80 hover:bg-sky-900/40 border-slate-700/60 text-slate-300'}`}
-                        >
-                          <span className="truncate">{f.label}</span>
-                          {isSelected && <Check className="w-3 h-3 text-sky-400 shrink-0" />}
-                        </button>
-                      );
-                    })}
+                    {fields.length === 0 ? (
+                      <div className="col-span-2 text-[10px] text-amber-300/90 bg-amber-950/40 p-2 rounded border border-amber-800/40">
+                        No fields defined yet in this project. Add fields in Records / Import tab to bind variables.
+                      </div>
+                    ) : (
+                      fields.map(f => {
+                        const isSelected = el.binding === f.key;
+                        return (
+                          <button
+                            key={f.id}
+                            onClick={() => {
+                              if (el.type === 'text' || el.type === 'barcode') {
+                                update({
+                                  binding: f.key,
+                                  text: `{{${f.key}}}`,
+                                  name: f.label
+                                });
+                              } else {
+                                update({ binding: f.key, name: f.label });
+                              }
+                            }}
+                            className={`px-2 py-1.5 rounded text-left text-[10px] border transition-all flex items-center justify-between gap-1 truncate ${isSelected ? 'bg-sky-600/30 border-sky-400 text-sky-200 font-semibold' : 'bg-slate-800/80 hover:bg-sky-900/40 border-slate-700/60 text-slate-300'}`}
+                          >
+                            <span className="truncate">{f.label}</span>
+                            {isSelected && <Check className="w-3 h-3 text-sky-400 shrink-0" />}
+                          </button>
+                        );
+                      })
+                    )}
                   </div>
                 </div>
 

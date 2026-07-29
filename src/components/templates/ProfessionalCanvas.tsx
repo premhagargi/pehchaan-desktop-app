@@ -406,6 +406,11 @@ export const ProfessionalCanvas: React.FC<ProfessionalCanvasProps> = ({
               draggable: !locked && activeTool === 'select',
               onClick: (e: any) => { e.cancelBubble = true; onSelectElement(el.id, e.evt.shiftKey); },
               onTap: (e: any) => { e.cancelBubble = true; onSelectElement(el.id); },
+              onDblClick: (e: any) => {
+                e.evt.preventDefault();
+                e.cancelBubble = true;
+                handleContextMenu(e.evt, el.id);
+              },
               onContextMenu: (e: any) => {
                 e.evt.preventDefault();
                 e.cancelBubble = true;

@@ -1,0 +1,60 @@
+{
+  "name": "pehchaan-desktop",
+  "version": "1.0.0",
+  "description": "Pehchaan - Native Bulk ID Card & Document Generation Engine",
+  "main": "dist-electron/main.js",
+  "author": "Antigravity",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && electron-builder --dir",
+    "dist": "tsc && vite build && electron-builder",
+    "preview": "vite preview"
+  },
+  "build": {
+    "appId": "com.pehchaan.desktop",
+    "productName": "Pehchaan Desktop",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*"
+    ],
+    "win": {
+      "target": ["nsis", "portable"]
+    }
+  },
+  "dependencies": {
+    "@tanstack/react-table": "^8.20.5",
+    "bwip-js": "^4.5.1",
+    "clsx": "^2.1.1",
+    "exceljs": "^4.4.0",
+    "fs-extra": "^11.2.0",
+    "jszip": "^3.10.1",
+    "konva": "^9.3.18",
+    "lucide-react": "^0.469.0",
+    "papaparse": "^5.5.2",
+    "pdf-lib": "^1.17.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-konva": "^19.0.2",
+    "tailwind-merge": "^3.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.17.0",
+    "@types/papaparse": "^5.3.15",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5",
+    "vite-plugin-electron": "^0.29.0",
+    "vite-plugin-electron-renderer": "^0.14.6"
+  }
+}

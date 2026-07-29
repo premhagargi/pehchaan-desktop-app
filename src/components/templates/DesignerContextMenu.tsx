@@ -9,8 +9,8 @@ import {
   CircleIcon,
   QrCodeIcon,
   Image01Icon,
-  LockIcon,
-  UnlockIcon,
+  LockKeyIcon,
+  SquareUnlock01Icon,
   ViewIcon,
   ViewOffIcon,
   Delete02Icon,
@@ -339,7 +339,7 @@ export const DesignerContextMenu: React.FC<DesignerContextMenuProps> = ({
                 title="Lock/Unlock"
                 className={`p-1 rounded hover:bg-slate-800 ${el.locked ? 'text-amber-400' : 'text-slate-400'}`}
               >
-                <Icon icon={el.locked ? LockIcon : UnlockIcon} size={14} />
+                <Icon icon={el.locked ? LockKeyIcon : SquareUnlock01Icon} size={14} />
               </button>
               <button
                 onClick={() => update({ visible: el.visible === false ? true : false })}

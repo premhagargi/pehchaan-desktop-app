@@ -3,8 +3,9 @@ import {
   Stage, Layer, Rect, Circle, Text as KonvaText, Image as KonvaImage,
   Transformer, Line, Group
 } from 'react-konva';
-import { RenderElement, RecordItem, ReferenceImageConfig } from '../../types';
+import { RenderElement, RecordItem, ReferenceImageConfig, FieldDefinition, TemplateItem } from '../../types';
 import { ActiveTool } from './DesignerPanel';
+import { DesignerContextMenu } from './DesignerContextMenu';
 
 const MM_TO_PX = 3.7795275591;
 const RULER_SIZE = 20;
@@ -33,6 +34,16 @@ interface ProfessionalCanvasProps {
   onSetTool: (t: ActiveTool) => void;
   onAddElement: (type: RenderElement['type'], extra?: Partial<RenderElement>) => void;
   onDuplicate: (ids?: string[]) => void;
+
+  fields?: FieldDefinition[];
+  template?: TemplateItem;
+  onUpdateTemplate?: (t: TemplateItem) => void;
+  onDelete?: () => void;
+  onLayerMove?: (action: 'front' | 'back' | 'up' | 'down') => void;
+  clipboard?: RenderElement[];
+  onCopy?: () => void;
+  onPaste?: () => void;
+  onCut?: () => void;
 }
 
 function useKonvaImage(url?: string) {
@@ -69,7 +80,16 @@ export const ProfessionalCanvas: React.FC<ProfessionalCanvasProps> = ({
   sampleRecord, referenceImage, onChangeReferenceImage,
   showGrid, snapToGrid, snapToObjects, showRulers,
   gridSpacingMm, zoom, onZoom,
-  activeTool, onSetTool, onAddElement, onDuplicate
+  activeTool, onSetTool, onAddElement, onDuplicate,
+  fields = [],
+  template,
+  onUpdateTemplate = () => {},
+  onDelete = () => {},
+  onLayerMove = () => {},
+  clipboard = [],
+  onCopy = () => {},
+  onPaste = () => {},
+  onCut = () => {}
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<any>(null);
@@ -84,6 +104,17 @@ export const ProfessionalCanvas: React.FC<ProfessionalCanvasProps> = ({
   const [selBox, setSelBox] = useState<{ x1: number; y1: number; x2: number; y2: number; active: boolean }>({
     x1: 0, y1: 0, x2: 0, y2: 0, active: false
   });
+  const [contextMenuPos, setContextMenuPos] = useState<{ x: number; y: number } | null>(null);
+
+  const handleContextMenu = (evt: MouseEvent, id?: string | null) => {
+    evt.preventDefault();
+    if (id) {
+      if (!selectedIds.includes(id)) {
+        onSelectElement(id, evt.shiftKey);
+      }
+    }
+    setContextMenuPos({ x: evt.clientX, y: evt.clientY });
+  };
 
   // Canvas dimensions in px
   const canvasW = widthMm * MM_TO_PX;
@@ -331,6 +362,10 @@ export const ProfessionalCanvas: React.FC<ProfessionalCanvasProps> = ({
         onMouseDown={handleStageMouseDown}
         onMouseMove={handleStageMouseMove}
         onMouseUp={handleStageMouseUp}
+        onContextMenu={(e: any) => {
+          e.evt.preventDefault();
+          handleContextMenu(e.evt, null);
+        }}
         style={{ cursor: isSpaceDown || activeTool === 'pan' ? 'grab' : 'default' }}
       >
         {/* Background workspace */}
@@ -371,6 +406,11 @@ export const ProfessionalCanvas: React.FC<ProfessionalCanvasProps> = ({
               draggable: !locked && activeTool === 'select',
               onClick: (e: any) => { e.cancelBubble = true; onSelectElement(el.id, e.evt.shiftKey); },
               onTap: (e: any) => { e.cancelBubble = true; onSelectElement(el.id); },
+              onContextMenu: (e: any) => {
+                e.evt.preventDefault();
+                e.cancelBubble = true;
+                handleContextMenu(e.evt, el.id);
+              },
               onDragMove: (e: any) => snapDragMove(e, el),
               onDragEnd: (e: any) => {
                 setGuides([]);
@@ -474,6 +514,31 @@ export const ProfessionalCanvas: React.FC<ProfessionalCanvasProps> = ({
         {showRulers && ' · Rulers'}
         {showGrid && ' · Grid'}
       </div>
+
+      {/* Right Click Context Menu */}
+      {contextMenuPos && (
+        <DesignerContextMenu
+          x={contextMenuPos.x}
+          y={contextMenuPos.y}
+          selectedElements={elements.filter(el => selectedIds.includes(el.id))}
+          fields={fields}
+          template={template || {
+            id: '', projectId: '', name: '', cardWidthMm: widthMm, cardHeightMm: heightMm, dpi: 300, sceneGraph: [], version: 1, createdAt: '', updatedAt: ''
+          }}
+          clipboard={clipboard}
+          onUpdateElement={onUpdateElement}
+          onUpdateElements={onUpdateElements}
+          onDelete={onDelete}
+          onDuplicate={onDuplicate}
+          onLayerMove={onLayerMove}
+          onCopy={onCopy}
+          onPaste={onPaste}
+          onCut={onCut}
+          onAddElement={onAddElement}
+          onUpdateTemplate={onUpdateTemplate}
+          onClose={() => setContextMenuPos(null)}
+        />
+      )}
     </div>
   );
 };

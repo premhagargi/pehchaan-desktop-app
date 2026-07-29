@@ -47,7 +47,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="h-screen bg-slate-950 text-slate-100 flex flex-col font-sans overflow-hidden">
       <Header
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -57,7 +57,11 @@ export const App: React.FC = () => {
         onNewProject={() => setIsCreateModalOpen(true)}
       />
 
-      <main className={activeTab === 'templates' ? 'flex-1 overflow-hidden' : 'flex-1 pb-16'}>
+      <main className={
+        activeTab === 'templates'
+          ? 'flex-1 overflow-hidden min-h-0'
+          : 'flex-1 overflow-y-auto min-h-0 pb-16'
+      }>
         {activeTab === 'dashboard' && (
           <Dashboard
             projects={projects}

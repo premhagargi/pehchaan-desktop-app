@@ -4,7 +4,6 @@ import { db } from '../../services/db';
 import { ProfessionalCanvas } from './ProfessionalCanvas';
 import { LeftToolbar } from './LeftToolbar';
 import { LeftSidebar } from './LeftSidebar';
-import { RightPropertyPanel } from './RightPropertyPanel';
 import { DesignerTopBar } from './DesignerTopBar';
 import {
   Save,
@@ -345,7 +344,7 @@ export const DesignerPanel: React.FC<DesignerPanelProps> = ({ project, onRefresh
   const selectedElement = selectedElements[0] || null;
 
   return (
-    <div className="flex flex-col h-full bg-[#0a0f1a]" style={{ height: 'calc(100vh - 56px)' }}>
+    <div className="flex flex-col h-full bg-[#0a0f1a]">
       {/* Top Bar */}
       <DesignerTopBar
         template={template}
@@ -445,22 +444,17 @@ export const DesignerPanel: React.FC<DesignerPanelProps> = ({ project, onRefresh
             onSetTool={setActiveTool}
             onAddElement={addElement}
             onDuplicate={handleDuplicate}
+            fields={fields}
+            template={template}
+            onUpdateTemplate={(t) => pushHistory(t)}
+            onDelete={handleDelete}
+            onLayerMove={(action) => selectedIds.forEach(id => handleLayerMove(id, action))}
+            clipboard={clipboard}
+            onCopy={handleCopy}
+            onPaste={handlePaste}
+            onCut={handleCut}
           />
         </div>
-
-        {/* Right Property Panel */}
-        <RightPropertyPanel
-          selectedElements={selectedElements}
-          allElements={currentElements}
-          fields={fields}
-          onUpdateElement={handleUpdateElement}
-          onUpdateElements={handleUpdateMultipleElements}
-          onDelete={handleDelete}
-          onDuplicate={() => handleDuplicate()}
-          onLayerMove={(action) => selectedIds.forEach(id => handleLayerMove(id, action))}
-          template={template}
-          onUpdateTemplate={(t) => pushHistory(t)}
-        />
       </div>
     </div>
   );
